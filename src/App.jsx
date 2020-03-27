@@ -9,6 +9,7 @@ import {
 import './assets/scss/bootstrap.scss';
 
 import Login from './components/login/Login';
+import ForgotPassword from './components/forgot-password/forgotPassword';
 import Navbar from './components/navbar/Navbar';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Switch>
           <Redirect exact from="/" to="/login" />
           <Route path="/login" component={ Login } />
+          <Route path="/forgot-password" component={ ForgotPassword } />
         </Switch>
       </Router>
     </div>

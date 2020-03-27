@@ -116,7 +116,7 @@ const Login = () => {
             <div className="card rounded-lg mt-3">
               <div className="card-body text-center p-3">
                 <span>Forgot password? </span>
-                <Link className="text-decoration-none" to="/">
+                <Link className="text-decoration-none" to="/forgot-password">
                   Reset now
                   { ' ' }
                   <ArrowRight size={ 16 } />
