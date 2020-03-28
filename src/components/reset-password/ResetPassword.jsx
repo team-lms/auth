@@ -26,7 +26,11 @@ const Login = () => {
   };
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name } = event.target;
+    let { value } = event.target;
+    if (name === 'otp') {
+      value = value.replace(/[^0-9]*/g, '');
+    }
     setResetDetails((prev) => ({
       ...prev,
       [name]: value
@@ -68,6 +72,7 @@ const Login = () => {
                     className={ `form-control ${(resetPasswordForm.submitted && resetPasswordForm.errors && resetPasswordForm.errors.otp) ? 'is-invalid' : ''}` }
                     name="otp"
                     id="otpField"
+                    maxLength="6"
                     value={ resetDetails.otp }
                     onChange={ handleChange }
                   />
