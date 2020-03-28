@@ -49,7 +49,7 @@ const ForgotPassword = ({ history }) => {
   return (
     <div className="container">
       <form onSubmit={ handleSubmit }>
-        <div className="row justify-content-center mt-5">
+        <div className="row justify-content-center my-5">
           <div className="col-12 col-sm-8 col-md-6 col-lg-4">
             <div className="card rounded-lg">
               <div className="card-body">
