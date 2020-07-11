@@ -59,7 +59,7 @@ const Login = () => {
               <div className="card-body">
                 <h4 className="text-center">Sign In</h4>
                 <hr />
-                <div className="form-group">
+                <div className="mb-3">
                   <label htmlFor="userId">Email or phone number</label>
                   <input
                     type="text"
@@ -78,7 +78,7 @@ const Login = () => {
                     )
                   }
                 </div>
-                <div className="form-group position-relative">
+                <div className="mb-3 position-relative">
                   <label htmlFor="passwordField">Password</label>
                   <input
                     type={ showPassword ? 'text' : 'password' }

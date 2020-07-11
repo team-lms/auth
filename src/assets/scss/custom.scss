@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Oleo+Script:700&display=swap');
+
+$font-family-sans-serif: 'Oxygen', sans-serif;
+$font-size-base: 0.938rem;
+
+$primary: #f15e6e;
+$secondary: #95a8c9;
+
+$enable-gradients: true;
+$enable-shadows: true;
+
+$input-focus-box-shadow: none;
+
+@import '~bootstrap/scss/bootstrap.scss';

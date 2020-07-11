@@ -65,7 +65,7 @@ const Login = () => {
                   <span className="font-weight-bold">9634077122</span>
                 </p>
                 <hr />
-                <div className="form-group">
+                <div className="mb-3">
                   <label htmlFor="otpField">OTP</label>
                   <input
                     type="text"
@@ -87,7 +87,7 @@ const Login = () => {
                     )
                   }
                 </div>
-                <div className="form-group">
+                <div className="mb-3">
                   <label htmlFor="passwordField">Password</label>
                   <input
                     type="password"
@@ -109,7 +109,7 @@ const Login = () => {
                     )
                   }
                 </div>
-                <div className="form-group position-relative">
+                <div className="mb-3 position-relative">
                   <label htmlFor="confirmPasswordField">Confirm Password</label>
                   <input
                     type="password"

@@ -56,7 +56,7 @@ const ForgotPassword = ({ history }) => {
                 <h4 className="text-center">Send OTP</h4>
                 <p className="text-center">Please enter your email or phone number registered with account. We will send you OTP on your email and phone.</p>
                 <hr />
-                <div className="form-group">
+                <div className="mb-3">
                   <label htmlFor="userId">Email or phone number</label>
                   <input
                     type="text"

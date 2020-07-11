@@ -6,7 +6,7 @@ import {
   Switch
 } from 'react-router-dom';
 
-import './assets/scss/bootstrap.scss';
+import './assets/scss/custom.scss';
 
 import Login from './components/login/Login';
 import ForgotPassword from './components/forgot-password/ForgotPassword';
