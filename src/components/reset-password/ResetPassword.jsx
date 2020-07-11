@@ -39,7 +39,7 @@ const Login = () => {
 
   useEffect(() => {
     const validationResult = validate(resetDetails, {
-      otp: { presence: { allowEmpty: false, message: '^Email or phone number can\'t be blank' } },
+      otp: { presence: { allowEmpty: false, message: '^OTP can\'t be blank' } },
       password: { presence: { allowEmpty: false } },
       confirmPassword: {
         presence: { allowEmpty: false }, equality: { attribute: 'password', message: '^Password is not same' }
