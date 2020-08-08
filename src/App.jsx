@@ -16,15 +16,13 @@ import Navbar from './components/navbar/Navbar';
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Navbar />
-        <Switch>
-          <Redirect exact from="/" to="/login" />
-          <Route path="/login" component={ Login } />
-          <Route path="/forgot-password" component={ ForgotPassword } />
-          <Route path="/reset-password" component={ ResetPassword } />
-        </Switch>
-      </Router>
+      <Navbar />
+      <Switch>
+        <Redirect exact from="/" to="/login" />
+        <Route path="/login" component={ Login } />
+        <Route path="/forgot-password" component={ ForgotPassword } />
+        <Route path="/reset-password" component={ ResetPassword } />
+      </Switch>
     </div>
   );
 }
