@@ -18,5 +18,4 @@ const ApiService = {
     }
   }
 };
-ApiService.post({ userId: 'admin@lms.com', password: 'Admin1sd23@' });
 export default ApiService;
