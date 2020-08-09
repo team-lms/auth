@@ -14,6 +14,12 @@ export default (state = {}, action) => {
       return { user: { email: action.userId } };
     case AuthConstants.FORGOT_PASSWORD_FAILURE:
       return {};
+    case AuthConstants.RESET_PASSWORD_REQUEST:
+      return { isBusy: true };
+    case AuthConstants.RESET_PASSWORD_SUCCESS:
+      return {};
+    case AuthConstants.RESET_PASSWORD_FAILURE:
+      return {};
     case AuthConstants.LOGOUT:
       return {};
     default:

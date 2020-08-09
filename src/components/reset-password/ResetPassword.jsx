@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { ArrowRight } from 'react-feather';
 import validate from 'validate.js';
+import { useSelector, useDispatch } from 'react-redux';
 import Navbar from '../navbar/Navbar';
+import { AuthActions } from '../../actions';
 
-const Login = () => {
-  const [resetPasswordForm, setResetPasswordForm] = useState({
+export default () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const alertMessage = useSelector((state) => state.auth && state.alert.message);
+  const email = useSelector((state) => state.auth.user && state.auth.user.email) || '';
+  const [formDetails, setFormDetails] = useState({
     submitted: false,
     errors: null
   });
-  const [resetDetails, setResetDetails] = useState({
+  const [formValues, setFormValues] = useState({
+    userId: '',
     otp: '',
     password: '',
     confirmPassword: ''
@@ -17,12 +24,12 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setResetPasswordForm((prev) => ({
+    setFormDetails((prev) => ({
       ...prev,
       submitted: true
     }));
-    if (!resetPasswordForm.errors) {
-      console.log('Form can be submit:- ', resetDetails);
+    if (!formDetails.errors) {
+      dispatch(AuthActions.resetPassword(formValues, history));
     }
   };
 
@@ -32,25 +39,34 @@ const Login = () => {
     if (name === 'otp') {
       value = value.replace(/[^0-9]*/g, '');
     }
-    setResetDetails((prev) => ({
+    setFormValues((prev) => ({
       ...prev,
       [name]: value
     }));
   };
 
   useEffect(() => {
-    const validationResult = validate(resetDetails, {
+    if (email) {
+      setFormValues((prev) => ({
+        ...prev,
+        userId: email
+      }));
+    }
+  }, [email]);
+
+  useEffect(() => {
+    const validationResult = validate(formValues, {
       otp: { presence: { allowEmpty: false, message: '^OTP can\'t be blank' } },
       password: { presence: { allowEmpty: false } },
       confirmPassword: {
         presence: { allowEmpty: false }, equality: { attribute: 'password', message: '^Password is not same' }
       }
     });
-    setResetPasswordForm((prev) => ({
+    setFormDetails((prev) => ({
       ...prev,
       errors: validationResult || null
     }));
-  }, [resetDetails]);
+  }, [formValues]);
 
   return (
     <>
@@ -64,28 +80,33 @@ const Login = () => {
                   <h4 className="text-center">Reset Password</h4>
                   <p className="text-center">
                     You are resetting password for
-                    <br />
-                    <span className="font-weight-bold">9634077122</span>
+                    { formValues.userId && (
+                      <>
+                        <br />
+                        <span className="font-weight-bold">{ formValues.userId }</span>
+                      </>
+                    ) }
                   </p>
                   <hr />
+                  { alertMessage && <p className="text-danger text-center">{ alertMessage }</p> }
                   <div className="mb-3">
                     <label htmlFor="otpField">OTP</label>
                     <input
                       type="text"
-                      className={ `form-control ${(resetPasswordForm.submitted && resetPasswordForm.errors && resetPasswordForm.errors.otp) ? 'is-invalid' : ''}` }
+                      className={ `form-control ${(formDetails.submitted && formDetails.errors && formDetails.errors.otp) ? 'is-invalid' : ''}` }
                       name="otp"
                       id="otpField"
                       maxLength="6"
-                      value={ resetDetails.otp }
+                      value={ formValues.otp }
                       onChange={ handleChange }
                     />
                     {
-                      (resetPasswordForm.submitted
-                        && resetPasswordForm.errors
-                        && resetPasswordForm.errors.otp)
+                      (formDetails.submitted
+                        && formDetails.errors
+                        && formDetails.errors.otp)
                       && (
                         <div className="text-danger small">
-                          { resetPasswordForm.errors.otp[0] }
+                          { formDetails.errors.otp[0] }
                         </div>
                       )
                     }
@@ -94,20 +115,20 @@ const Login = () => {
                     <label htmlFor="passwordField">Password</label>
                     <input
                       type="password"
-                      className={ `form-control ${(resetPasswordForm.submitted && resetPasswordForm.errors && resetPasswordForm.errors.password) ? 'is-invalid' : ''}` }
+                      className={ `form-control ${(formDetails.submitted && formDetails.errors && formDetails.errors.password) ? 'is-invalid' : ''}` }
                       name="password"
                       id="passwordField"
-                      value={ resetDetails.password }
+                      value={ formValues.password }
                       onChange={ handleChange }
                     />
                     {
                       (
-                        resetPasswordForm.submitted
-                        && resetPasswordForm.errors
-                        && resetPasswordForm.errors.password)
+                        formDetails.submitted
+                        && formDetails.errors
+                        && formDetails.errors.password)
                       && (
                         <div className="text-danger small">
-                          { resetPasswordForm.errors.password[0] }
+                          { formDetails.errors.password[0] }
                         </div>
                       )
                     }
@@ -116,19 +137,19 @@ const Login = () => {
                     <label htmlFor="confirmPasswordField">Confirm Password</label>
                     <input
                       type="password"
-                      className={ `form-control ${(resetPasswordForm.submitted && resetPasswordForm.errors && resetPasswordForm.errors.confirmPassword) ? 'is-invalid' : ''}` }
+                      className={ `form-control ${(formDetails.submitted && formDetails.errors && formDetails.errors.confirmPassword) ? 'is-invalid' : ''}` }
                       name="confirmPassword"
                       id="confirmPasswordField"
-                      value={ resetDetails.confirmPassword }
+                      value={ formValues.confirmPassword }
                       onChange={ handleChange }
                     />
                     {
-                      (resetPasswordForm.submitted
-                        && resetPasswordForm.errors
-                        && resetPasswordForm.errors.confirmPassword)
+                      (formDetails.submitted
+                        && formDetails.errors
+                        && formDetails.errors.confirmPassword)
                       && (
                         <div className="text-danger small">
-                          { resetPasswordForm.errors.confirmPassword[0] }
+                          { formDetails.errors.confirmPassword[0] }
                         </div>
                       )
                     }
@@ -157,5 +178,3 @@ const Login = () => {
     </>
   );
 };
-
-export default Login;

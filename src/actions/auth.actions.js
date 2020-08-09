@@ -61,5 +61,24 @@ export default {
         dispatch(AlertActions.error(response.message));
       }
     };
+  },
+
+  resetPassword(userDetails, history) {
+    const request = () => ({ type: AuthConstants.RESET_PASSWORD_REQUEST });
+    const success = () => ({ type: AuthConstants.RESET_PASSWORD_SUCCESS });
+    const failure = () => ({ type: AuthConstants.RESET_PASSWORD_FAILURE });
+
+    return async (dispatch) => {
+      dispatch(request());
+      const response = await AuthService.resetPassword(userDetails);
+      if (response && response.success) {
+        dispatch(AlertActions.success('Password has been changed'));
+        dispatch(success());
+        history.push('login');
+      } else {
+        dispatch(failure());
+        dispatch(AlertActions.error(response.message));
+      }
+    };
   }
 };
