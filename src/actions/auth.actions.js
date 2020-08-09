@@ -53,7 +53,8 @@ export default {
       dispatch(request());
       const response = await AuthService.forgotPassword(userDetails);
       if (response && response.success) {
-        dispatch(success(response.data.user));
+        dispatch(success());
+        dispatch(AlertActions.clear());
         history.push('reset-password');
       } else {
         dispatch(failure());

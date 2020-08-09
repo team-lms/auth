@@ -14,7 +14,7 @@ import { AuthActions } from '../../actions';
 
 const Login = () => {
   const isBusy = useSelector((state) => state.auth && state.auth.isBusy) || false;
-  const alertMessage = useSelector((state) => state.auth && state.alert.message);
+  const alert = useSelector((state) => state.auth && state.alert);
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [formDetails, setFormDetails] = useState({
@@ -67,7 +67,7 @@ const Login = () => {
                 <div className="card-body">
                   <h4 className="text-center">Sign In</h4>
                   <hr />
-                  { alertMessage && <p className="text-danger text-center">{ alertMessage }</p> }
+                  { alert.message && <p className={ `text-${alert.type} text-center` }>{ alert.message }</p> }
                   <div className="mb-3">
                     <label htmlFor="userId">Email or phone number</label>
                     <input
