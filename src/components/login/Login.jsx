@@ -13,7 +13,7 @@ import Navbar from '../navbar/Navbar';
 import { AuthActions } from '../../actions';
 
 const Login = () => {
-  const loggingIn = useSelector((state) => state.auth && state.auth.loggingIn) || false;
+  const isBusy = useSelector((state) => state.auth && state.auth.isBusy) || false;
   const alertMessage = useSelector((state) => state.auth && state.alert.message);
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
@@ -115,7 +115,7 @@ const Login = () => {
                       { showPassword && <EyeOff size={ 15 } /> }
                     </button>
                   </div>
-                  <button type="submit" className="btn btn-primary btn-block" disabled={ loggingIn }>
+                  <button type="submit" className="btn btn-primary btn-block" disabled={ isBusy }>
                     Sign in
                     { ' ' }
                     <LogIn size={ 16 } />
