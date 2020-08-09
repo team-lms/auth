@@ -39,5 +39,26 @@ export default {
         dispatch(AlertActions.error(response.message));
       }
     };
+  },
+
+  forgotPassword(userDetails, history) {
+    const request = () => ({ type: AuthConstants.FORGOT_PASSWORD_REQUEST });
+    const success = () => ({
+      type: AuthConstants.FORGOT_PASSWORD_SUCCESS,
+      userId: userDetails.userId
+    });
+    const failure = () => ({ type: AuthConstants.FORGOT_PASSWORD_FAILURE });
+
+    return async (dispatch) => {
+      dispatch(request());
+      const response = await AuthService.forgotPassword(userDetails);
+      if (response && response.success) {
+        dispatch(success(response.data.user));
+        history.push('reset-password');
+      } else {
+        dispatch(failure());
+        dispatch(AlertActions.error(response.message));
+      }
+    };
   }
 };

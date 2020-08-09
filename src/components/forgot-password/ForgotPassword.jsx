@@ -1,51 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  ArrowRight,
-  ArrowRightCircle
-} from 'react-feather';
+import { Link, useHistory } from 'react-router-dom';
+import { ArrowRight, ArrowRightCircle } from 'react-feather';
 import validate from 'validate.js';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import Navbar from '../navbar/Navbar';
+import { AuthActions } from '../../actions';
 
-const ForgotPassword = ({ history }) => {
-  const [forgotPasswordForm, setForgotPasswordForm] = useState({
-    submitted: false,
-    errors: null
-  });
-  const [userDetails, setUserDetails] = useState({
-    userId: ''
-  });
+const ForgotPassword = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const alertMessage = useSelector((state) => state.auth && state.alert.message);
+  const [formDetails, setFormDetails] = useState({ submitted: false, errors: null });
+  const [formValues, setFormValues] = useState({ userId: '' });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setForgotPasswordForm((prev) => ({
+    setFormDetails((prev) => ({
       ...prev,
       submitted: true
     }));
-    if (!forgotPasswordForm.errors) {
-      console.log('Form can be submit:- ', userDetails);
-      history.push('/reset-password');
+    if (!formDetails.errors) {
+      dispatch(AuthActions.forgotPassword(formValues, history));
     }
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setUserDetails((prev) => ({
+    setFormValues((prev) => ({
       ...prev,
       [name]: value
     }));
   };
 
   useEffect(() => {
-    const validationResult = validate(userDetails, {
-      userId: { presence: { allowEmpty: false, message: '^Email or phone number can\'t be blank' } }
+    const validationResult = validate(formValues, {
+      userId: { presence: { allowEmpty: false, message: '^Email can\'t be blank' }, email: { message: '^Email is not valid' } }
     });
-    setForgotPasswordForm((prev) => ({
+    setFormDetails((prev) => ({
       ...prev,
       errors: validationResult || null
     }));
-  }, [userDetails]);
+  }, [formValues]);
 
   return (
     <>
@@ -57,25 +52,26 @@ const ForgotPassword = ({ history }) => {
               <div className="card rounded-lg">
                 <div className="card-body">
                   <h4 className="text-center">Send OTP</h4>
-                  <p className="text-center">Please enter your email or phone number registered with account. We will send you OTP on your email and phone.</p>
+                  <p className="text-center">Please enter your email registered with account. We will send you OTP on your email and phone.</p>
                   <hr />
+                  { alertMessage && <p className="text-danger text-center">{ alertMessage }</p> }
                   <div className="mb-3">
-                    <label htmlFor="userId">Email or phone number</label>
+                    <label htmlFor="userId">Email</label>
                     <input
                       type="text"
-                      className={ `form-control ${(forgotPasswordForm.submitted && forgotPasswordForm.errors && forgotPasswordForm.errors.userId) ? 'is-invalid' : ''}` }
+                      className={ `form-control ${(formDetails.submitted && formDetails.errors && formDetails.errors.userId) ? 'is-invalid' : ''}` }
                       name="userId"
                       id="userId"
-                      value={ userDetails.userId }
+                      value={ formValues.userId }
                       onChange={ handleChange }
                     />
                     {
-                      (forgotPasswordForm.submitted
-                        && forgotPasswordForm.errors
-                        && forgotPasswordForm.errors.userId)
+                      (formDetails.submitted
+                        && formDetails.errors
+                        && formDetails.errors.userId)
                       && (
                         <div className="text-danger small">
-                          { forgotPasswordForm.errors.userId[0] }
+                          { formDetails.errors.userId[0] }
                         </div>
                       )
                     }
@@ -103,12 +99,6 @@ const ForgotPassword = ({ history }) => {
       </div>
     </>
   );
-};
-
-ForgotPassword.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired
 };
 
 export default ForgotPassword;
