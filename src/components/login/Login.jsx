@@ -8,48 +8,53 @@ import {
 } from 'react-feather';
 import validate from 'validate.js';
 import './Login.scss';
+import { useDispatch, useSelector } from 'react-redux';
 import Navbar from '../navbar/Navbar';
+import { AuthActions } from '../../actions';
 
 const Login = () => {
+  const loggingIn = useSelector((state) => state.auth && state.auth.loggingIn) || false;
+  const alertMessage = useSelector((state) => state.auth && state.alert.message);
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [loginForm, setLoginForm] = useState({
+  const [formDetails, setFormDetails] = useState({
     submitted: false,
     errors: null
   });
-  const [loginDetails, setLoginDetails] = useState({
+  const [formValues, setFormValues] = useState({
     userId: '',
     password: ''
   });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setLoginForm((prev) => ({
+    setFormDetails((prev) => ({
       ...prev,
       submitted: true
     }));
-    if (!loginForm.errors) {
-      console.log('Form can be submit:- ', loginDetails);
+    if (!formDetails.errors) {
+      dispatch(AuthActions.login(formValues));
     }
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setLoginDetails((prev) => ({
+    setFormValues((prev) => ({
       ...prev,
       [name]: value
     }));
   };
 
   useEffect(() => {
-    const validationResult = validate(loginDetails, {
-      userId: { presence: { allowEmpty: false, message: '^Email or phone number can\'t be blank' } },
+    const validationResult = validate(formValues, {
+      userId: { presence: { allowEmpty: false, message: '^Email can\'t be blank' }, email: { message: '^Email is not valid' } },
       password: { presence: { allowEmpty: false } }
     });
-    setLoginForm((prev) => ({
+    setFormDetails((prev) => ({
       ...prev,
       errors: validationResult || null
     }));
-  }, [loginDetails]);
+  }, [formValues]);
 
   return (
     <>
@@ -62,21 +67,22 @@ const Login = () => {
                 <div className="card-body">
                   <h4 className="text-center">Sign In</h4>
                   <hr />
+                  { alertMessage && <p className="text-danger text-center">{ alertMessage }</p> }
                   <div className="mb-3">
                     <label htmlFor="userId">Email or phone number</label>
                     <input
                       type="text"
-                      className={ `form-control ${(loginForm.submitted && loginForm.errors && loginForm.errors.userId) ? 'is-invalid' : ''}` }
+                      className={ `form-control ${(formDetails.submitted && formDetails.errors && formDetails.errors.userId) ? 'is-invalid' : ''}` }
                       name="userId"
                       id="userId"
-                      value={ loginDetails.userId }
+                      value={ formValues.userId }
                       onChange={ handleChange }
                     />
                     {
-                      (loginForm.submitted && loginForm.errors && loginForm.errors.userId)
+                      (formDetails.submitted && formDetails.errors && formDetails.errors.userId)
                       && (
                         <div className="text-danger small">
-                          { loginForm.errors.userId[0] }
+                          { formDetails.errors.userId[0] }
                         </div>
                       )
                     }
@@ -85,17 +91,17 @@ const Login = () => {
                     <label htmlFor="passwordField">Password</label>
                     <input
                       type={ showPassword ? 'text' : 'password' }
-                      className={ `form-control ${(loginForm.submitted && loginForm.errors && loginForm.errors.password) ? 'is-invalid' : ''}` }
+                      className={ `form-control ${(formDetails.submitted && formDetails.errors && formDetails.errors.password) ? 'is-invalid' : ''}` }
                       name="password"
                       id="passwordField"
-                      value={ loginDetails.password }
+                      value={ formValues.password }
                       onChange={ handleChange }
                     />
                     {
-                      (loginForm.submitted && loginForm.errors && loginForm.errors.password)
+                      (formDetails.submitted && formDetails.errors && formDetails.errors.password)
                       && (
                         <div className="text-danger small">
-                          { loginForm.errors.password[0] }
+                          { formDetails.errors.password[0] }
                         </div>
                       )
                     }
@@ -109,7 +115,7 @@ const Login = () => {
                       { showPassword && <EyeOff size={ 15 } /> }
                     </button>
                   </div>
-                  <button type="submit" className="btn btn-primary btn-block">
+                  <button type="submit" className="btn btn-primary btn-block" disabled={ loggingIn }>
                     Sign in
                     { ' ' }
                     <LogIn size={ 16 } />
